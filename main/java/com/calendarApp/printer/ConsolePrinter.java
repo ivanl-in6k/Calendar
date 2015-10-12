@@ -1,6 +1,6 @@
 package com.calendarApp.printer;
 
-import com.calendarApp.calendar.MonthCalendar;
+import com.calendarApp.calendar.Month;
 
 /**
  * Created by ivan on 09.10.15.
@@ -12,12 +12,12 @@ public class ConsolePrinter extends AbstractCalendarPrinter {
     private final String ANSI_GREEN = "\u001B[32m";
     private final String ANSI_RESET = "\u001B[0m";
 
-    public ConsolePrinter(MonthCalendar monthCalendar) {
-        super(monthCalendar);
+    public ConsolePrinter(Month month) {
+        super(month);
     }
 
     public void printHeaderCalendar() {
-        System.out.println(monthCalendar.getCurrentMonthTitle());
+        System.out.println(month.getCurrentMonthTitle());
         for (Day day : AbstractCalendarPrinter.Day.values()) {
             System.out.format(DAY_FORMAT, day);
         }

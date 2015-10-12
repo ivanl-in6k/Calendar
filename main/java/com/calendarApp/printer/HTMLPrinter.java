@@ -1,7 +1,7 @@
 package com.calendarApp.printer;
 
 import com.calendarApp.FileWriter;
-import com.calendarApp.calendar.MonthCalendar;
+import com.calendarApp.calendar.Month;
 
 import java.io.IOException;
 
@@ -14,12 +14,12 @@ public class HTMLPrinter extends AbstractCalendarPrinter {
 
     private String html = "";
 
-    public HTMLPrinter(MonthCalendar monthCalendar) {
-        super(monthCalendar);
+    public HTMLPrinter(Month month) {
+        super(month);
     }
 
     public void printHeaderCalendar() {
-        html += "<div class=\"calendarTitle\">" + monthCalendar.getCurrentMonthTitle() + "</div>";
+        html += "<div class=\"calendarTitle\">" + month.getCurrentMonthTitle() + "</div>";
         html += "<tr>";
         for (Day day : AbstractCalendarPrinter.Day.values()) {
            html += "<th>" + day + "</th>";

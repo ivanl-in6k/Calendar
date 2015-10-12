@@ -1,6 +1,6 @@
 package com.calendarApp.printer;
 
-import com.calendarApp.calendar.MonthCalendar;
+import com.calendarApp.calendar.Month;
 
 import java.util.List;
 
@@ -11,12 +11,12 @@ public abstract class AbstractCalendarPrinter {
 
     protected final String DAY_FORMAT = "%6s";
 
-    protected MonthCalendar monthCalendar;
+    protected Month month;
 
     protected enum Day {MON, TUE, WEN, THU, FRI, SAT, SUN};
 
-    public AbstractCalendarPrinter(MonthCalendar monthCalendar) {
-        this.monthCalendar = monthCalendar;
+    public AbstractCalendarPrinter(Month month) {
+        this.month = month;
     }
 
     protected abstract void beginPrint();
@@ -34,11 +34,11 @@ public abstract class AbstractCalendarPrinter {
 //    }
 
     public void printCalendar() {
-        List<com.calendarApp.calendar.Day> calendarDays = monthCalendar.getCurrentMonthDays();
+        List<com.calendarApp.calendar.Day> calendarDays = month.getCurrentMonthDays();
         beginPrint();
         for (com.calendarApp.calendar.Day calendarDay : calendarDays) {
             setColor(calendarDay);
-            print(calendarDay.);
+            print(calendarDay.getDayOfMonth());
             println(calendarDay);
         }
         afterPrint();

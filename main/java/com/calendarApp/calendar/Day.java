@@ -9,12 +9,26 @@ import java.util.TimeZone;
 public class Day {
     private int dayOfMonth;
     private int weekday;
-    private int month;
+
+    public int getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(int dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
+    public int getWeekday() {
+        return weekday;
+    }
+
+    public void setWeekday(int weekday) {
+        this.weekday = weekday;
+    }
 
     public Day(int day, int weekday, int month) {
         this.dayOfMonth = day;
         this.weekday = weekday;
-        this.month = month;
     }
 
     public boolean isWeekend() {
@@ -25,14 +39,12 @@ public class Day {
         return weekday == Calendar.SUNDAY;
     }
 
-    public boolean isToday() {
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        return dayOfMonth == calendar.get(Calendar.DAY_OF_MONTH) && month == calendar.get(Calendar.MONTH);
+    public boolean isDayEqual() {
+        return false;
     }
 
-    public boolean isCurrentMonth() {
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
-        return month == calendar.get(Calendar.MONTH);
+    public boolean isInMonth(int month) {
+        return false;
     }
 
 }

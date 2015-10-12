@@ -2,7 +2,7 @@ package com.calendarApp;
 
 import com.calendarApp.printer.AbstractCalendarPrinter;
 import com.calendarApp.printer.ConsolePrinter;
-import com.calendarApp.calendar.MonthCalendar;
+import com.calendarApp.calendar.Month;
 
 import java.util.Calendar;
 
@@ -11,10 +11,10 @@ import java.util.Calendar;
  */
 public class Main {
     public static void main(String[] args) {
-        MonthCalendar monthCalendar = new MonthCalendar(Calendar.OCTOBER);
-        AbstractCalendarPrinter calendarPrinter;
+        Month month = new Month(Calendar.OCTOBER);
+//        AbstractCalendarPrinter calendarPrinter;
 //        calendarPrinter = new HTMLPrinter(monthCalendar);
-        calendarPrinter = new ConsolePrinter(monthCalendar);
-        calendarPrinter.printCalendar();
+//        calendarPrinter = new ConsolePrinter(month);
+//        calendarPrinter.printCalendar();
     }
 }
