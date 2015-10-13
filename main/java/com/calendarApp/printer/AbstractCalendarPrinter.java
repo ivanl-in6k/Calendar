@@ -1,51 +1,63 @@
 package com.calendarApp.printer;
 
+import com.calendarApp.calendar.Day;
 import com.calendarApp.calendar.Month;
+import com.calendarApp.calendar.Week;
 
+import java.io.PrintStream;
+import java.text.DateFormatSymbols;
 import java.util.List;
 
 /**
- * Created by ivan on 09.10.15.
- */
+* Created by ivan on 09.10.15.
+*/
 public abstract class AbstractCalendarPrinter {
 
-    protected final String DAY_FORMAT = "%6s";
+    protected abstract void openWeek();
+    protected abstract void closeWeek();
+    protected abstract void printDayName(String line);
+    protected abstract void print(Day day);
+    protected abstract void println();
+    protected abstract void beforeTablePrint();
+    protected abstract void afterTablePrint();
 
-    protected Month month;
+    protected final int FIRST_LETTER = 0;
+    protected static final String DAY_FORMAT = "%6s";
 
-    protected enum Day {MON, TUE, WEN, THU, FRI, SAT, SUN};
+    protected final int LAST_LETTER = 3;
 
-    public AbstractCalendarPrinter(Month month) {
-        this.month = month;
+    protected PrintStream printStream;
+
+    public AbstractCalendarPrinter(PrintStream printStream) {
+        this.printStream = printStream;
     }
 
-    protected abstract void beginPrint();
-
-    protected abstract void afterPrint();
-
-    protected abstract void setColor(com.calendarApp.calendar.Day calendarDay);
-
-//    protected void printHeaderCalendar(){
-////        System.out.println(monthCalendar.getCurrentMonthTitle());
-//        for (Day day : Day.values()) {
-//            print(DAY_FORMAT, day);
-//        }
-//        println();
-//    }
-
-    public void printCalendar() {
-        List<com.calendarApp.calendar.Day> calendarDays = month.getCurrentMonthDays();
-        beginPrint();
-        for (com.calendarApp.calendar.Day calendarDay : calendarDays) {
-            setColor(calendarDay);
-            print(calendarDay.getDayOfMonth());
-            println(calendarDay);
+    protected void printCalendarHeader() {
+        String[] weekdays = new DateFormatSymbols().getWeekdays();
+        openWeek();
+        for(String s: weekdays){
+            printDayName(cutString(s));
         }
-        afterPrint();
+        closeWeek();
     }
 
-    protected abstract void println(com.calendarApp.calendar.Day calendarDay);
+    String cutString(String s) {
+        if(s.length() > LAST_LETTER) return s.substring(FIRST_LETTER, LAST_LETTER);
+        return s;
+    }
 
-    protected abstract void print(int day);
+    public void printCalendar(Month month) {
+        List<Week> weeks = month.getWeeks();
+        beforeTablePrint();
+        printCalendarHeader();
+        for (Week week : weeks) {
+            openWeek();
+            for (Day day : week.getDays()) {
+                print(day);
+            }
+            closeWeek();
+        }
+        afterTablePrint();
+    }
 
 }

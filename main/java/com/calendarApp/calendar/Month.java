@@ -1,62 +1,64 @@
 package com.calendarApp.calendar;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 public class Month {
+    private List<Week> weeks = new ArrayList<>();
 
-    private Calendar currentCalendar = Calendar.getInstance();
-    private Calendar featureCalendar = Calendar.getInstance();
+    private Calendar featureMonth = Calendar.getInstance();
+    private Calendar currentMonth = Calendar.getInstance();
 
     public Month(int month) {
         setCurrentMonth(month);
+        setFeatureMonth(month);
+        rollMonthToFirstDayOfFirstWeek();
+        createMonthWeeks();
     }
 
-    public String getCurrentMonthTitle() {
-        return new SimpleDateFormat("MMMMMMMM").format(currentCalendar.getTime());
+    public List<Week> getWeeks() {
+        return weeks;
     }
 
     private void setCurrentMonth(int month) {
-        currentCalendar.set(Calendar.MONTH, month);
-        currentCalendar.set(Calendar.DAY_OF_MONTH, 1);
-
-        featureCalendar.set(Calendar.MONTH, month);
-        featureCalendar.add(Calendar.MONTH, 1);
+        currentMonth.set(Calendar.MONTH, month);
+        currentMonth.set(Calendar.DAY_OF_MONTH, 1);
     }
 
-    public List<Day> getCurrentMonthDays() {
-        rollCalendarToFirstDayOfFirstWeek();
-        List<Day> month = new ArrayList<>();
-
-        while (!isLastDayOfLastWeekReached()) {
-            month.add(createCurrentCalendarDay());
-            currentCalendar.add(Calendar.DAY_OF_MONTH, 1);
-        }
-        currentCalendar.add(Calendar.MONTH, -1);
-        return month;
+    private void setFeatureMonth(int month) {
+        featureMonth.set(Calendar.MONTH, month);
+        featureMonth.set(Calendar.DAY_OF_MONTH, 1);
+        featureMonth.add(Calendar.MONTH, 1);
     }
 
-    private Day createCurrentCalendarDay() {
-        return new Day(
-                currentCalendar.get(Calendar.DAY_OF_MONTH),
-                currentCalendar.get(Calendar.DAY_OF_WEEK),
-                currentCalendar.get(Calendar.MONTH)
-        );
-    }
-
-    private void rollCalendarToFirstDayOfFirstWeek() {
+    private void rollMonthToFirstDayOfFirstWeek() {
+        Week w0eek = new Week();
         while (!isDayOfWeek(Calendar.MONDAY)) {
-            currentCalendar.add(Calendar.DAY_OF_WEEK, -1);
+            currentMonth.add(Calendar.DAY_OF_WEEK, -1);
+        }
+    }
+
+    private void createMonthWeeks() {
+        Week week = new Week();
+        while(!isLastDayOfLastWeekReached()) {
+           if(isDayOfWeek(Calendar.MONDAY)) {
+               week = new Week();
+               week.createDay(currentMonth.get(Calendar.DAY_OF_MONTH), currentMonth.get(Calendar.DAY_OF_WEEK));
+               weeks.add(week);
+           } else {
+               week.createDay(currentMonth.get(Calendar.DAY_OF_MONTH), currentMonth.get(Calendar.DAY_OF_WEEK));
+           }
+           currentMonth.add(Calendar.DAY_OF_MONTH, 1);
         }
     }
 
     private boolean isLastDayOfLastWeekReached() {
-        return currentCalendar.after(featureCalendar) && isDayOfWeek(Calendar.MONDAY);
+        return currentMonth.after(featureMonth) && isDayOfWeek(Calendar.MONDAY);
     }
 
-    private boolean isDayOfWeek(int dayOfWeek) {
-        return currentCalendar.get(Calendar.DAY_OF_WEEK) == dayOfWeek;
+    private boolean isDayOfWeek(int day) {
+        return currentMonth.get(Calendar.DAY_OF_WEEK) == day;
     }
+
 }

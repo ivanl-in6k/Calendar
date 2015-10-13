@@ -14,19 +14,11 @@ public class Day {
         return dayOfMonth;
     }
 
-    public void setDayOfMonth(int dayOfMonth) {
-        this.dayOfMonth = dayOfMonth;
-    }
-
     public int getWeekday() {
         return weekday;
     }
 
-    public void setWeekday(int weekday) {
-        this.weekday = weekday;
-    }
-
-    public Day(int day, int weekday, int month) {
+    public Day(int day, int weekday) {
         this.dayOfMonth = day;
         this.weekday = weekday;
     }
@@ -35,16 +27,17 @@ public class Day {
         return weekday == Calendar.SATURDAY || weekday == Calendar.SUNDAY;
     }
 
-    public boolean isSunday() {
-        return weekday == Calendar.SUNDAY;
+    public boolean isMonday() {
+        return weekday == Calendar.MONDAY;
     }
 
-    public boolean isDayEqual() {
-        return false;
+    public boolean isDayEqual(int day) {
+       return this.dayOfMonth == day;
     }
 
     public boolean isInMonth(int month) {
-        return false;
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
+        return month == calendar.get(Calendar.MONTH);
     }
 
 }

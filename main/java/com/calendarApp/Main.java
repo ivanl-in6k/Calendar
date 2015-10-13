@@ -1,9 +1,13 @@
 package com.calendarApp;
 
-import com.calendarApp.printer.AbstractCalendarPrinter;
-import com.calendarApp.printer.ConsolePrinter;
 import com.calendarApp.calendar.Month;
+import com.calendarApp.printer.AbstractCalendarPrinter;
+import com.calendarApp.printer.ASCIIPrinter;
+import com.calendarApp.printer.HTMLPrinter;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.Calendar;
 
 /**
@@ -11,10 +15,16 @@ import java.util.Calendar;
  */
 public class Main {
     public static void main(String[] args) {
-        Month month = new Month(Calendar.OCTOBER);
-//        AbstractCalendarPrinter calendarPrinter;
-//        calendarPrinter = new HTMLPrinter(monthCalendar);
-//        calendarPrinter = new ConsolePrinter(month);
-//        calendarPrinter.printCalendar();
+
+        AbstractCalendarPrinter calendarPrinter;
+        FileOutputStream fileWriter = null;
+        try {
+            fileWriter = new FileOutputStream("fileCalendar2.html", true);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        calendarPrinter = new HTMLPrinter(new PrintStream(fileWriter));
+//        calendarPrinter = new ASCIIPrinter(System.out);
+        calendarPrinter.printCalendar(new Month(Calendar.OCTOBER));
     }
 }

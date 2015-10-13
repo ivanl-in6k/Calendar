@@ -1,69 +1,71 @@
 package com.calendarApp.printer;
 
-import com.calendarApp.FileWriter;
-import com.calendarApp.calendar.Month;
+import com.calendarApp.calendar.Day;
 
-import java.io.IOException;
+import javax.swing.text.html.HTML;
+import java.io.PrintStream;
 
 /**
- * Created by ivan on 09.10.15.
- */
+* Created by ivan on 09.10.15.
+*/
 public class HTMLPrinter extends AbstractCalendarPrinter {
 
-    FileWriter fileWriter = new FileWriter();
-
-    private String html = "";
-
-    public HTMLPrinter(Month month) {
-        super(month);
+    public HTMLPrinter(PrintStream printStream) {
+        super(printStream);
     }
 
-    public void printHeaderCalendar() {
-        html += "<div class=\"calendarTitle\">" + month.getCurrentMonthTitle() + "</div>";
-        html += "<tr>";
-        for (Day day : AbstractCalendarPrinter.Day.values()) {
-           html += "<th>" + day + "</th>";
-        }
-        html += "</tr>";
+    public String html = "";
+
+    @Override
+    protected void beforeTablePrint() {
+        printStream.print(HTMLTag.HTML + "\n" + HTMLTag.getHead("Calendar 1.1", getCssFilePath()) + "\n" +HTMLTag.BODY);
+        printStream.println(HTMLTag.TABLE);
+        printStream.println(HTMLTag.createAndSetTRAttributes());
     }
 
     @Override
-    public void beginPrint() {
-        html += HTMLTag.HTML + HTMLTag.getHead("Calendar 1.2", inputCssFilePath());
-        html += HTMLTag.BODY;
-        html += HTMLTag.TABLE + HTMLTag.TR;
-        printHeaderCalendar();
-    }
-
-    @Override
-    protected void afterPrint() {
+    protected void afterTablePrint() {
+        String html = "";
         html += HTMLTag.C_TABLE;
         html += HTMLTag.C_BODY + HTMLTag.C_HTML;
-        try {
-            fileWriter.printInFile(html);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    protected void println(com.calendarApp.calendar.Day calendarDay) {
-        if (calendarDay.isSunday() == false) return;
-
-        html += HTMLTag.C_TR + HTMLTag.TR;
+        printStream.print(html);
     }
 
 
-    @Override
-    protected void setColor(com.calendarApp.calendar.Day day) {
+    protected void println() {
+//        String html = HTMLTag.C_TR + HTMLTag.TR;
 
+    }
+
+    protected String getColor(Day day) {
+        String color;
+//        color = day.isDayEqual(14) ? "000099" : "";
+        color = day.isWeekend() ?  "#FF0000" : "";
+        return color;
     }
 
     @Override
-    protected void print(int day) {
-        html += day + "</td>";
+    protected void openWeek() {
+        printStream.print(HTMLTag.TR);
     }
 
-    private String inputCssFilePath() {
+    @Override
+    protected void closeWeek() {
+        printStream.print(HTMLTag.C_TR);
+    }
+
+    @Override
+    protected void print(Day day) {
+        printStream.printf(HTMLTag.TD_COLOR_ATTR + getColor(day) + HTMLTag.C_TAG + day.getDayOfMonth() + HTMLTag.C_TD);
+    }
+
+    @Override
+    protected void printDayName(String line) {
+        String html = HTMLTag.TD + line + HTMLTag.C_TD;
+        printStream.print(line);
+    }
+
+    private String getCssFilePath() {
         String path = "main.css";
         String css = "<link rel=\"stylesheet\" type=\"text/css\" href=" + path + ">";
         return css;

@@ -1,5 +1,7 @@
 package com.calendarApp.printer;
 
+import java.util.List;
+
 /**
  * Created by ivan on 12.10.15.
  */
@@ -24,6 +26,8 @@ public class HTMLTag {
 
     public static final String TD = "<td>";
     public static final String C_TD = "</td>";
+    public static final  String TD_COLOR_ATTR = "<td bgcolor=";
+    public static final  String C_TAG = ">";
 
     public static String getHead(String title, String ... tags) {
         String head = HEAD + TITLE + title + C_TITLE;
@@ -34,7 +38,16 @@ public class HTMLTag {
         return head;
     }
 
-    public  static String createAndSetTrAttributes(String ... attributes) {
+    public  static String createAndSetTDAttributes(String ... attributes) {
+        String td = "<td";
+        for (String attribute : attributes) {
+            td += attribute;
+        }
+        td += C_TD;
+        return td;
+    }
+
+    public  static String createAndSetTRAttributes(String ... attributes) {
         String tr = "<tr";
         for (String attribute : attributes) {
             tr += attribute;
